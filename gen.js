@@ -7,6 +7,10 @@
                         
 
 
+// 
+// Setup
+// *****
+
 // Requires
 var fs = require('fs');
 var path = require('path');
@@ -21,6 +25,10 @@ filter(args);
 
 
 
+// 
+// Routing
+// *******
+
 // Determines routing for the proper action
 function filter(command) {
 	switch (command[0]) {
@@ -28,11 +36,17 @@ function filter(command) {
 		case 'gen':
     		console.log("Creating Files...");
     		createModel(command[1]);
+            createController(command[1]);
     		break;
         // 'model' command generates just model files
         case 'model':
             console.log("Creating Model...");
             createModel(command[1]);
+            break;
+        // 'controller' command generates the controller file with CRUD
+        case 'controller':
+            console.log("Creating Controllers...");
+            createController(command[1]);
             break;
         // Non-allowed commands end the script
     	default:
@@ -41,6 +55,11 @@ function filter(command) {
     }
 }
 
+
+
+// 
+// Model Creator
+// ******************
 
 // Pulls and creates model
 function createModel(model) {
@@ -65,12 +84,53 @@ function createModel(model) {
 // Pulls model from seed-model.js
 function generateModel(model) {
     var seed = fs.readFileSync('seeds/model-seed.js', 'utf8');
-    // console.log(seed.replace(/{{replace}}/g, model));
-    return seed.replace(/{{replace}}/g, model);
+    seed = seed.replace(/{{replace}}/g, model);
+    return seed.replace(/{{Replace}}/g, capitaliseFirstLetter(model));
 }
 
 
 
+// 
+// Controller Creator
+// ******************
+
+// Pulls and creates controller
+function createController(controller) {
+    mkpath('app/controllers', function (err) {
+        if (err) throw err;
+        console.log('Created or confirmed - app/controllers/');
+
+        // Pulls controller from seed-controller.js
+        var body = generateController(controller);
+
+        // Creates controllername(s).js file
+        fs.writeFile("app/controllers/" + controller + "s.js", body , function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("Created - app/controllers/" + controller + "s.js");
+            }
+        });             
+    });
+}
+
+// Pulls controller from seed-controller.js
+function generateController(controller) {
+    var seed = fs.readFileSync('seeds/controller-seed.js', 'utf8');
+    seed = seed.replace(/{{replace}}/g, controller);
+    return seed.replace(/{{Replace}}/g, capitaliseFirstLetter(controller));
+}
+
+
+
+// 
+// Utilities 
+// *********
+
+// Capitalizes First Letter
+function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 
 // Mkpath function taken from https://github.com/jrajav/mkpath

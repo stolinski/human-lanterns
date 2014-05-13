@@ -7,10 +7,10 @@ var mongoose = require('mongoose'),
   ObjectId = mongoose.Schema.Types.ObjectId;
 
 /**
- * client Schema
+ * Client Schema
  */
 
-var clientSchema = new Schema({
+var ClientSchema = new Schema({
   title: {type:String, required: true },
   body: String,
   // binary:  Buffer,
@@ -22,4 +22,4 @@ var clientSchema = new Schema({
   // _refname: { type: ObjectId, ref: 'Name' },
 });
 
-mongoose.model('client', clientSchema);
+mongoose.model('Client', ClientSchema);
