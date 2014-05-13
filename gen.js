@@ -1,70 +1,79 @@
+                                                                                                                                                                                                               
+//  __   __     ______     _____     ______        ______     ______     __   __     ______     ______     ______     ______   ______     ______    
+// /\ "-.\ \   /\  __ \   /\  __-.  /\  ___\      /\  ___\   /\  ___\   /\ "-.\ \   /\  ___\   /\  == \   /\  __ \   /\__  _\ /\  __ \   /\  == \   
+// \ \ \-.  \  \ \ \/\ \  \ \ \/\ \ \ \  __\      \ \ \__ \  \ \  __\   \ \ \-.  \  \ \  __\   \ \  __<   \ \  __ \  \/_/\ \/ \ \ \/\ \  \ \  __<   
+//  \ \_\\"\_\  \ \_____\  \ \____-  \ \_____\     \ \_____\  \ \_____\  \ \_\\"\_\  \ \_____\  \ \_\ \_\  \ \_\ \_\    \ \_\  \ \_____\  \ \_\ \_\ 
+//   \/_/ \/_/   \/_____/   \/____/   \/_____/      \/_____/   \/_____/   \/_/ \/_/   \/_____/   \/_/ /_/   \/_/\/_/     \/_/   \/_____/   \/_/ /_/ 
+                        
+
+
+// Requires
 var fs = require('fs');
 var path = require('path');
 
-
-// print process.argv
-process.argv.forEach(function (val, index, array) {
-  console.log(index + ': ' + val);
-});
-
-var args = process.argv;
-
-args.shift();
-args.shift();
-
-args = args.toString();
+// Grabs command arguments and pulling out commands
+var args = process.argv[2].toString();
 args = args.split(':');
 
+
+// Kicks things off. Sends commands to router
 filter(args);
 
 
 
-// Generates model file
-function generateModel(model) {
-	var seed = fs.readFileSync('seeds/model-seed.js', 'utf8');
-	// console.log(seed.replace(/{{replace}}/g, model));
-	return seed.replace(/{{replace}}/g, model);
-}
-
-
-
 // Determines routing for the proper action
-function filter(args) {
-	switch (args[0]) {
+function filter(command) {
+	switch (command[0]) {
+        // 'gen' command generates all files
 		case 'gen':
-    		console.log("Creating Files")
-    		createModel(args[1]);
+    		console.log("Creating Files...");
+    		createModel(command[1]);
     		break;
+        // 'model' command generates just model files
+        case 'model':
+            console.log("Creating Model...");
+            createModel(command[1]);
+            break;
+        // Non-allowed commands end the script
     	default:
-    		console.log("Incorrect Command")
+    		console.log("Incorrect Command");
     		break;
     }
 }
 
 
+// Pulls and creates model
 function createModel(model) {
 	mkpath('app/models', function (err) {
    		if (err) throw err;
-    	console.log('+app/models');
-    	// Creates model file
-    	var body = generateModel(model);
-    		console.log(body);
+    	console.log('Created or confirmed - app/models/');
 
-			fs.writeFile("app/models/" + model + ".js", body , function(err) {
-			    if(err) {
-			        console.log(err);
-			    } else {
-			        console.log("The file was saved!");
-			    }
-			});     		
+    	// Pulls model from seed-model.js
+    	var body = generateModel(model);
+
+        // Creates modelname.js file
+        fs.writeFile("app/models/" + model + ".js", body , function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("Created - app/models/" + model + ".js");
+            }
+        });     		
 	});
+}
+
+// Pulls model from seed-model.js
+function generateModel(model) {
+    var seed = fs.readFileSync('seeds/model-seed.js', 'utf8');
+    // console.log(seed.replace(/{{replace}}/g, model));
+    return seed.replace(/{{replace}}/g, model);
 }
 
 
 
 
 
-
+// Mkpath function taken from https://github.com/jrajav/mkpath
 function mkpath(dirpath, mode, callback) {
     dirpath = path.resolve(dirpath);
 

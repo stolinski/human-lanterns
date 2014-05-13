@@ -1,4 +1,4 @@
-# Level Up Node Express Generator
+# Node Express Generator
 
 ## An extreme WIP
 
