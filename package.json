@@ -2,7 +2,7 @@
   "author": "Scott Tolinski",
   "name": "human-lanterns",
   "description": "Builds out basic CRUD files scaffolding for Express/Mongoose/EJS",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "url": "https://github.com/stolinski/human-lanterns"
   },
