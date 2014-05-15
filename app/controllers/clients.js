@@ -20,20 +20,20 @@ var Client = mongoose.model('Client');
 exports.index = function (req, res) {
   Client.find().exec(function(err, clients) {
     if (req.url.indexOf('/json') > -1) return res.send(clients); // json
-    return res.render('clients', {client:client}); // html
+    return res.render('clients', {clients:clients}); // html
+  });
 };
 
 /**
  * Show
  * GET /clients/:slug
  * GET /clients/:slug/json
- * GET /clients/:slug/log/:__v
- * GET /clients/:slug/log/:__v/json
  */
 
 exports.show = function (req, res, next) {
   Client.findOne({ 'slug': req.params.slug }, function (err, client) {
     if (err) return handleError(err);
+    if (req.url.indexOf('/json') > -1) return res.send(client); // json
     return res.render('clients/show', {client:client}); // html
   });
 };
@@ -71,19 +71,13 @@ exports.edit = function (req, res, next) {
 
 exports.create = function (req, res, next) {
   var client = new Client(req.body);
-  client._user = req.user;
-  client.attach('image', req.files.image, function(err) {
-    if(err) return next(err);
-    client.save(function(err) {
-      console.log( 'made it past save' );
-      if( !err ) {
-        console.log( 'made it no error' );
-        return res.redirect('/clients');
-      } else {
-        console.log( 'error' );
-        console.log( err );
-      }
-    });
+  client.save(function(err) {
+    if( !err ) {
+      return res.redirect('/clients');
+    } else {
+      console.log( 'error' );
+      console.log( err );
+    }
   });
 };
 
@@ -96,11 +90,7 @@ exports.create = function (req, res, next) {
 
 exports.update = function (req, res, next) {
   Client.findOne({ 'slug': req.params.slug }, function (err, client) {
-    client.name = req.body.name;
-    client.contact = req.body.contact;
-    client.email = req.body.email;
-    client.status = req.body.status;
-    client._user = req.user;
+    client = req.body;
     client.save( function( err ) {
       if( !err ) {
         return res.redirect('/clients');
@@ -110,6 +100,12 @@ exports.update = function (req, res, next) {
     }); 
   });
 };
+
+
+/**
+ * Delete
+ * POST /clients/:id/edit
+ */
 
 
 exports.delete = function (req, res, next) {

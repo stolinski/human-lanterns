@@ -12,7 +12,8 @@ var mongoose = require('mongoose'),
 
 var {{Replace}}Schema = new Schema({
   title: {type:String, required: true },
-  body: String,
+  slug: String,
+  // body: String,
   // binary:  Buffer,
   // living:  Boolean,
   // updated: { type: Date, default: Date.now }
@@ -21,5 +22,26 @@ var {{Replace}}Schema = new Schema({
   // array:      [],
   // _refname: { type: ObjectId, ref: 'Name' },
 });
+
+
+
+/**
+ * Pre-validation hook; Sanitizers
+ */
+
+{{Replace}}Schema.pre('validate', function(next) {
+  next();
+});
+
+
+/**
+ * Pre-save hook
+ */
+
+{{Replace}}Schema.pre('save', function(next) {
+  this.slug = toSlug(this.title);
+  next();
+});
+
 
 mongoose.model('{{Replace}}', {{Replace}}Schema);

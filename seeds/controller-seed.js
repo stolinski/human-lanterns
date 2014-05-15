@@ -20,20 +20,20 @@ var {{Replace}} = mongoose.model('{{Replace}}');
 exports.index = function (req, res) {
   {{Replace}}.find().exec(function(err, {{replace}}s) {
     if (req.url.indexOf('/json') > -1) return res.send({{replace}}s); // json
-    return res.render('{{replace}}s', {{{replace}}:{{replace}}}); // html
+    return res.render('{{replace}}s', {{{replace}}s:{{replace}}s}); // html
+  });
 };
 
 /**
  * Show
  * GET /{{replace}}s/:slug
  * GET /{{replace}}s/:slug/json
- * GET /{{replace}}s/:slug/log/:__v
- * GET /{{replace}}s/:slug/log/:__v/json
  */
 
 exports.show = function (req, res, next) {
   {{Replace}}.findOne({ 'slug': req.params.slug }, function (err, {{replace}}) {
     if (err) return handleError(err);
+    if (req.url.indexOf('/json') > -1) return res.send({{replace}}); // json
     return res.render('{{replace}}s/show', {{{replace}}:{{replace}}}); // html
   });
 };
@@ -71,19 +71,13 @@ exports.edit = function (req, res, next) {
 
 exports.create = function (req, res, next) {
   var {{replace}} = new {{Replace}}(req.body);
-  {{replace}}._user = req.user;
-  {{replace}}.attach('image', req.files.image, function(err) {
-    if(err) return next(err);
-    {{replace}}.save(function(err) {
-      console.log( 'made it past save' );
-      if( !err ) {
-        console.log( 'made it no error' );
-        return res.redirect('/{{replace}}s');
-      } else {
-        console.log( 'error' );
-        console.log( err );
-      }
-    });
+  {{replace}}.save(function(err) {
+    if( !err ) {
+      return res.redirect('/{{replace}}s');
+    } else {
+      console.log( 'error' );
+      console.log( err );
+    }
   });
 };
 
@@ -96,11 +90,7 @@ exports.create = function (req, res, next) {
 
 exports.update = function (req, res, next) {
   {{Replace}}.findOne({ 'slug': req.params.slug }, function (err, {{replace}}) {
-    {{replace}}.name = req.body.name;
-    {{replace}}.contact = req.body.contact;
-    {{replace}}.email = req.body.email;
-    {{replace}}.status = req.body.status;
-    {{replace}}._user = req.user;
+    {{replace}} = req.body;
     {{replace}}.save( function( err ) {
       if( !err ) {
         return res.redirect('/{{replace}}s');
@@ -110,6 +100,12 @@ exports.update = function (req, res, next) {
     }); 
   });
 };
+
+
+/**
+ * Delete
+ * POST /{{replace}}s/:id/edit
+ */
 
 
 exports.delete = function (req, res, next) {

@@ -37,6 +37,8 @@ function filter(command) {
     		console.log("Creating Files...");
     		createModel(command[1]);
             createController(command[1]);
+            createRoutes(command[1]);
+            createViews(command[1]);
     		break;
         // 'model' command generates just model files
         case 'model':
@@ -47,6 +49,16 @@ function filter(command) {
         case 'controller':
             console.log("Creating Controllers...");
             createController(command[1]);
+            break;
+        // 'routes' command generates the routes file with CRUD
+        case 'routes':
+            console.log("Creating Routes...");
+            createRoutes(command[1]);
+            break;
+        // 'views' command generates the routes file with CRUD
+        case 'views':
+            console.log("Creating Views...");
+            createViews(command[1]);
             break;
         // Non-allowed commands end the script
     	default:
@@ -124,6 +136,91 @@ function generateController(controller) {
 
 
 // 
+// Routes Creator
+// ******************
+
+// Pulls and creates routes
+function createRoutes(route) {
+    mkpath('app/routes', function (err) {
+        if (err) throw err;
+        console.log('Created or confirmed - app/routes/');
+
+        // Pulls route from seed-route.js
+        var body = generateRoutes(route);
+
+        // Creates routename(s).js file
+        fs.writeFile("app/routes/" + route + "s.js", body , function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("Created - app/routes/" + route + "s.js");
+                console.log("******** Notice ********\nYou MUST consolidate routes into main routes file, they will not work as is.\n******** Notice ********");
+            }
+        });             
+    });
+}
+
+// Pulls route from seed-routes.js
+function generateRoutes(route) {
+    var seed = fs.readFileSync('seeds/routes-seed.js', 'utf8');
+    seed = seed.replace(/{{replace}}/g, route);
+    return seed.replace(/{{Replace}}/g, capitaliseFirstLetter(route));
+}
+
+
+
+// 
+// Views Creator
+// ******************
+
+// Pulls and creates routes
+function createViews(view) {
+    mkpath('app/views/' + view + 's', function (err) {
+        if (err) throw err;
+        console.log('Created or confirmed - app/views/');
+
+        // Pulls view from seed-view.js
+        generateViews(view);          
+    });
+}
+
+// Pulls view from seed-views.js
+function generateViews(view) {
+    var seeds = ['index.ejs', 'partial.ejs', 'form.ejs'];
+
+    seeds.forEach(function(seed) {
+
+        var body = pullViews(view, seed);
+
+        if (seed == 'partial.ejs') {
+            seed = view + '.ejs';
+        }
+
+        var path = "app/views/" + view + 's/' + seed;
+
+        // Creates viewname(s).js file
+        fs.writeFile(path, body , function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("Created - " + path);
+            }
+        });   
+
+        console.log("Created - " + seed );
+    });
+}
+
+// Pulls seed files 
+function pullViews(view, seedFile) {
+    var seed = fs.readFileSync("seeds/" + seedFile, 'utf8');
+    seed = seed.replace(/{{replace}}/g, view);
+    return seed.replace(/{{Replace}}/g, capitaliseFirstLetter(view));
+}
+
+
+
+// 
 // Utilities 
 // *********
 
@@ -165,7 +262,7 @@ function mkpath(dirpath, mode, callback) {
             callback(new Error(dirpath + ' exists and is not a directory'));
         }
     });
-};
+}
 
 mkpath.sync = function mkpathsync(dirpath, mode) {
     dirpath = path.resolve(dirpath);

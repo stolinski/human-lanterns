@@ -12,7 +12,8 @@ var mongoose = require('mongoose'),
 
 var ClientSchema = new Schema({
   title: {type:String, required: true },
-  body: String,
+  slug: String,
+  // body: String,
   // binary:  Buffer,
   // living:  Boolean,
   // updated: { type: Date, default: Date.now }
@@ -21,5 +22,26 @@ var ClientSchema = new Schema({
   // array:      [],
   // _refname: { type: ObjectId, ref: 'Name' },
 });
+
+
+
+/**
+ * Pre-validation hook; Sanitizers
+ */
+
+ClientSchema.pre('validate', function(next) {
+  next();
+});
+
+
+/**
+ * Pre-save hook
+ */
+
+ClientSchema.pre('save', function(next) {
+  this.slug = toSlug(this.title);
+  next();
+});
+
 
 mongoose.model('Client', ClientSchema);

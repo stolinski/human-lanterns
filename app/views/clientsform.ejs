@@ -1,0 +1,7 @@
+<form method="post" class="content-form">
+
+  <input value="<%= _client.title? _client.title : '' %>" type="text" name="title" placeholder="Title" />
+
+  <input type="submit" />
+  <a href="/clients/<%= _client._id %>/delete" class="btn btn-delete">Delete</a>
+</form>

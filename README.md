@@ -28,3 +28,12 @@ This creates app/controllers folder(s) if they don't already exist and creates a
 
 
 Very soon 'gen:' will generate the boilerplate for views (using ejs), controllers, and models and other commands like 'model:' will be used to just generate the model.
+
+
+## Requirements
+
+This uses a toSlug(); middleware function. Please add this to your middleware, or use this function in your pre-save hook
+
+    toSlug = function (value) {
+      return value.toLowerCase().replace(/[ |_]/g, '-').replace(/[^\w-]+/g,'');
+    };

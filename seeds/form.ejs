@@ -1,0 +1,7 @@
+<form method="post" class="content-form">
+
+  <input value="<%= _{{replace}}.title? _{{replace}}.title : '' %>" type="text" name="title" placeholder="Title" />
+
+  <input type="submit" />
+  <a href="/{{replace}}s/<%= _{{replace}}._id %>/delete" class="btn btn-delete">Delete</a>
+</form>
