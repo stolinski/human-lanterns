@@ -7,10 +7,10 @@ var mongoose = require('mongoose'),
   ObjectId = mongoose.Schema.Types.ObjectId;
 
 /**
- * Client Schema
+ * Test Schema
  */
 
-var ClientSchema = new Schema({
+var TestSchema = new Schema({
   title: {type:String, required: true },
   slug: String,
   // body: String,
@@ -29,7 +29,7 @@ var ClientSchema = new Schema({
  * Pre-validation hook; Sanitizers
  */
 
-ClientSchema.pre('validate', function(next) {
+TestSchema.pre('validate', function(next) {
   next();
 });
 
@@ -38,10 +38,10 @@ ClientSchema.pre('validate', function(next) {
  * Pre-save hook
  */
 
-ClientSchema.pre('save', function(next) {
+TestSchema.pre('save', function(next) {
   this.slug = toSlug(this.title);
   next();
 });
 
 
-mongoose.model('Client', ClientSchema);
+mongoose.model('Test', TestSchema);

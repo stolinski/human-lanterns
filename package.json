@@ -1,0 +1,24 @@
+{
+  "author": "Scott Tolinski",
+  "name": "human-lanters",
+  "description": "Builds out basic CRUD files scaffolding for Express/Mongoose/EJS",
+  "version": "0.0.1",
+  "repository": {
+    "url": "https://github.com/stolinski/human-lanterns"
+  },
+  "main": "./lib/human-lanterns",
+  "keywords": [
+    "scaffolding",
+    "express",
+    "mongoose",
+    "ejs",
+    "generator"
+  ],
+  "bin": {
+    "lanterns": "./bin/lanterns"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
