@@ -1,8 +1,17 @@
 # Human Lanterns v0.0.3
 
-## An extreme WIP
+Builds out basic CRUD scaffolding files for Express/Mongoose/EJS with the following file stucture.
 
-Builds out basic CRUD files scaffolding for Express/Mongoose/EJS with the following file stucture.
+## Usage
+
+### Install
+
+    npm install -g human-lanterns
+
+### Running
+
+    lanterns gen:modelname
+    
 
     app
     	- views
@@ -10,6 +19,8 @@ Builds out basic CRUD files scaffolding for Express/Mongoose/EJS with the follow
     	|		- index.ejs
     	|		- modelname.ejs
     	|		- form.ejs
+    	|       - edit.ejs
+    	|       - new.ejs
     
     	- routes
     	|	- modelname(s).js (to be copied and deleted)
@@ -69,9 +80,14 @@ This uses a toSlug(); middleware function. Please add this to your middleware, o
 
 ## Todos
 
-
-* Finish views generator. Currently missing the new.ejs and edit.ejs seeds
 * Clean up code
 * Check for existing files and prompt for overwrite
-* Create help command
-* Create usage doc when no args are passed
+
+
+## Acknowledgments
+
+This package takes its name from my favorite movie, the Sun Chung classic Human Lanterns (1982) [Trailer](https://www.youtube.com/watch?v=cIKSIT_0JsU), [Cool Ass Cinema Review](http://www.coolasscinema.com/2010/03/human-lanterns-1982-review.html)  - Word of warning - This movie is gruesome and violent but is completely unique and has an excellent visual style and choreography.
+
+### Sponsored By
+
+[Level Up Tuts](http://leveluptuts.com/) - [Youtube Channel](https://www.youtube.com/user/LevelUpTuts/)
