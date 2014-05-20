@@ -1,6 +1,6 @@
-# Human Lanterns v0.0.3
+# Human Lanterns v0.0.4
 
-Builds out basic CRUD scaffolding files for Express/Mongoose/EJS with the following file stucture.
+Builds out basic RESTful scaffolding files for Express/Mongoose/EJS with the following file stucture.
 
 ## Usage
 
@@ -56,20 +56,22 @@ This creates app/models folder(s) if they don't already exist and creates a mode
 
     lanterns controllers:modelname
 
-This creates app/controllers folder(s) if they don't already exist and creates a names.js file inside with basic CRUD controllers.
+This creates app/controllers folder(s) if they don't already exist and creates a names.js file inside with basic RESTful controllers.
 
 
 #### Views Generator
 
     lanterns views:modelname
 
-This creates app/views folder(s) if they don't already exist and creates an ejs template for the basic CRUD controllers. See above for files created specifically.
+This creates app/views folder(s) if they don't already exist and creates an ejs template for the basic RESTful controllers. See above for files created specifically.
 
 
 
 ## Requirements
 
 This is to be used with Express 4.
+
+This uses [ejs-locals](https://github.com/RandomEtc/ejs-locals). Please install and add ejs-locals.
 
 This uses a toSlug(); middleware function. Please add this to your middleware, or use this function in your pre-save hook
 
